@@ -8,10 +8,12 @@ import requests
 import base64
 import psycopg2
 import json
+from dotenv import load_dotenv # type: ignore
+import os
 
 # 1. Obtener un token de acceso
-client_id = 'e81b4379e75f4d7fb4e7cc667ff53f44'
-client_secret = '07ae04b03f234242846c78cc099aebe1'
+client_id = os.getenv("client_id")
+client_secret = os.getenv("client_secret")
 
 auth_url = 'https://accounts.spotify.com/api/token'
 auth_header = base64.b64encode((client_id + ':' + client_secret).encode('ascii')).decode('ascii')
@@ -29,11 +31,11 @@ data = response.json()['items']
 
 # 3. Conectar a Redshift
 conn = psycopg2.connect(
-    dbname="data-engineer-database",
-    user="gretel141000_coderhouse",
-    password="1qn0fgE80l",
-    host="data-engineer-cluster.cyhh5bfevlmn.us-east-1.redshift.amazonaws.com",
-    port="5439"
+    dbname = os.getenv("dbname"),
+    user = os.getenv("user"),
+    password = os.getenv("password"),
+    host = os.getenv("host"),
+    port = os.getenv("port")
 )
 cursor = conn.cursor()
 
